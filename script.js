@@ -1,28 +1,33 @@
 const userInput = document.querySelector('input');
-const submitButton = document.querySelector('button');
+const form = document.querySelector('form');
 const wordLists = document.querySelector('.dictionaryList');
 const error = document.querySelector('.error');
-const ListArray = [];
+let ListArray = [];
 
-window.focus(userInput)
-
-submitButton.addEventListener('click',(e) =>{
+form.addEventListener('submit',(e) =>{
     e.preventDefault();
     if(userInput.value.length == '' || userInput.value.length == undefined){
         error.innerText = `The input field cannot be empty`;
     }else{
         error.innerText ='';
         printLetters(userInput.value).forEach((word,i) => {
+            const list = document.createElement('li');
             if(ListArray.length >50){
-                wordLists.innerHTML = `<p>please wait while your result loads...</p>`;
+                error.innerText = 'please wait while your result loads...';
                 setTimeout(()=>{
-                    wordLists.innerHTML += `<li>${i+1} ~~~~~~~~ ${word}</li>`;
+                    error.innerText = '';
+                    list.textContent = `${i+1} ~~~~~~~~ ${word}`;
+                    wordLists.append(list);
+                    ListArray = []
                 },5000)
             }else{
-                wordLists.innerHTML += `<li>${i+1} ~~~~~~~~ ${word}</li>`;
+                list.textContent = `${i+1} ~~~~~~~~ ${word}`;
+                wordLists.append(list);
+                ListArray = []
             }
         });
     }
+    userInput.value = '';
 })
 function printLetters(word,active=''){
     if(word.length == 0){
